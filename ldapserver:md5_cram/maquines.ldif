@@ -1,0 +1,21 @@
+# Llistat total de la organitzacio dc=edt,dc=org
+# @edt 2016
+# M06-ASO
+# -----------------------------------------------
+# ---------- Usuaris ----------------------------
+
+dn: uid=maquina01,ou=usuaris,dc=edt,dc=org
+objectclass: posixAccount
+objectclass: inetOrgPerson
+cn: maquina01
+sn: maquina01
+homephone: 666-666-666
+mail: maquina01@edt.org
+description: alumne de 1asix
+ou: 1asix
+uid: maquina01
+uidNumber: 7777
+gidNumber: 610
+homeDirectory: /tmp/home/1asix/maquina01
+userPassword: {SHA}3MC5MIQQs/KgELPp0Te2n5Syf9pAAzdz
+
