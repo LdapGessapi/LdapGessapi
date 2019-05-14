@@ -80,6 +80,7 @@ objectclass: organization
 
 dn: uid=pau,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
+objectclass: inetOrgPerson
 cn: Pau Pou
 cn: Pauet Pou
 sn: Pou
@@ -156,21 +157,21 @@ gidNumber: 100
 homeDirectory: /tmp/home/jordi
 userPassword: {SSHA}T5jrMgpJwZZgu0azkLIVoYhiG08/KGUv
 
-dn: uid=conejillo,ou=usuaris,dc=edt,dc=org
+dn: uid=prova1,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
 objectclass: inetOrgPerson
-cn: Conejillo Indias
+cn: prova1 Indias
 sn: Indias
 homephone: 555-666-2224
-mail: conejillo@edt.org
+mail: prova1@edt.org
 description: Watch out for this girl
 ou: Alumnes
 ou: Profes
-uid: conejillo
+uid: prova1
 uidNumber: 5005
 gidNumber: 100
-homeDirectory: /tmp/home/conejillo
-userPassword: {SASL}
+homeDirectory: /tmp/home/prova1
+userPassword:
 
 dn: uid=admin,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -566,7 +567,7 @@ gidNumber: 600
 description: Grup de alumnes
 memberUid: anna
 memberuid: marta
-memberUid: conejillo
+memberUid: prova1
 memberUid: jordi
 objectclass: posixGroup
 

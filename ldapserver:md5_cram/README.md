@@ -37,5 +37,5 @@ objectclass: posixGroup
 #### Execució
 
 ```
-$ docker run --rm --name ldap -h ldap --net ldapnet -d danicano/ldapserver:simple
+$ docker run --rm --name ldap.md5_cram -h ldap.md5_cram --net ldapnet -d danicano/ldapserver:md5_cram
 ```
