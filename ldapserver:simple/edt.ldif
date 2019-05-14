@@ -80,6 +80,7 @@ objectclass: organization
 
 dn: uid=pau,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
+objectclass: inetOrgPerson
 cn: Pau Pou
 cn: Pauet Pou
 sn: Pou
