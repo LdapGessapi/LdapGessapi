@@ -11,3 +11,6 @@ slaptest -F /etc/openldap/slapd.d -f /opt/docker/slapd.conf
 slapadd -F /etc/openldap/slapd.d -l /opt/docker/edt.ldif
 chown -R ldap.ldap /etc/openldap/slapd.d
 chown -R ldap.ldap /var/lib/ldap
+cp saslauthd /etc/sysconfig/saslauthd
+cp saslauthd.conf /etc/saslauthd.conf
+cp slapd2.conf /etc/sasl2/slapd.conf
