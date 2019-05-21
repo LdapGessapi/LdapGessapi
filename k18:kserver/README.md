@@ -17,5 +17,5 @@ Les característiques principals són:
 
 Execució:
 ```
-docker run --rm --name kserver.edt.org -h kserver.edt.org --net mynet -s edtasixm11/k18:kserver
+docker run --rm --name kserver.edt.org -h kserver.edt.org --net gssapinet -d danicano/k18:kserver_gssapi
 ```

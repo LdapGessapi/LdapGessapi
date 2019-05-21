@@ -11,6 +11,6 @@ bash /opt/docker/auth.sh
 cp /opt/docker/nslcd.conf /etc/nslcd.conf
 cp /opt/docker/ldap.conf /etc/openldap/ldap.conf
 cp /opt/docker/nsswitch.conf /etc/nsswitch.conf
-
+cp /opt/docker/cacert.pem /etc/openldap/certs/.
 
 
