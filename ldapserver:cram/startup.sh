@@ -4,7 +4,4 @@
 # -------------------------------------
 
 /opt/docker/install.sh && echo "Install Ok"
-/sbin/slapd -d0  &
-/sbin/saslauthd -d -a ldap  && echo "saslauthd Ok"
-
-
+/sbin/slapd -d0

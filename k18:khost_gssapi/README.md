@@ -46,11 +46,35 @@ Test:
 
 
 ```
-$ su - local01
-
-[local01@host ~]$ su - user03
-Password:  kuser03
-
-[user03@host ~]$ id
-uid=1005(user03) gid=100(users) groups=100(users),1001(kusers)
+[root@khost docker]# kinit pere
+	Password for pere@EDT.ORG: 
+[root@khost docker]# ldapwhoami  -D 'dc=edt,dc=org' -Y GSSAPI -ZZ
+	SASL/GSSAPI authentication started
+	SASL username: pere@EDT.ORG
+	SASL SSF: 256
+	SASL data security layer installed.
+	dn:uid=pere,cn=edt.org,cn=gssapi,cn=auth
+[root@khost docker]# kinit admin/admin
+	Password for admin/admin@EDT.ORG: 
+[root@khost docker]# ldapwhoami  -D 'dc=edt,dc=org' -Y GSSAPI -ZZ
+	SASL/GSSAPI authentication started
+	SASL username: admin/admin@EDT.ORG
+	SASL SSF: 256
+	SASL data security layer installed.
+	dn:cn=manager,dc=edt,dc=org
+[root@khost docker]# kdestroy 
+[root@khost docker]# kinit admin
+	Password for admin@EDT.ORG: 
+[root@khost docker]# ldapwhoami  -D 'dc=edt,dc=org' -Y GSSAPI -ZZ
+	SASL/GSSAPI authentication started
+	SASL username: admin@EDT.ORG
+	SASL SSF: 256
+	SASL data security layer installed.
+	dn:cn=manager,dc=edt,dc=org
+[root@khost docker]# ldapadd -f maquines.ldif  -h ldap_gssapi.edt.org -Y GSSAPI
+	SASL/GSSAPI authentication started
+	SASL username: admin@EDT.ORG
+	SASL SSF: 256
+	SASL data security layer installed.
+	adding new entry "uid=maquina01,ou=usuaris,dc=edt,dc=org"
 ```

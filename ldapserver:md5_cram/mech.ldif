@@ -1,7 +1,0 @@
-dn: cn=config
-changetype: modify
-add: olcSaslHost
-olcSaslHost: localhost
--
-add: olcSaslSecProps
-olcSaslSecProps: none
