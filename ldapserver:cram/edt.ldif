@@ -171,7 +171,23 @@ uid: prova1
 uidNumber: 5005
 gidNumber: 100
 homeDirectory: /tmp/home/prova1
-userPassword:
+userPassword: prova1
+
+dn: uid=prova2,ou=usuaris,dc=edt,dc=org
+objectclass: posixAccount
+objectclass: inetOrgPerson
+cn: prova2 Indias
+sn: Indias
+homephone: 555-666-2224
+mail: prova2@edt.org
+description: Watch out for this girl
+ou: Alumnes
+ou: Profes
+uid: prova2
+uidNumber: 5006
+gidNumber: 100
+homeDirectory: /tmp/home/prova2
+userPassword: 
 
 dn: uid=admin,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -568,6 +584,7 @@ description: Grup de alumnes
 memberUid: anna
 memberuid: marta
 memberUid: prova1
+memberUid: prova2
 memberUid: jordi
 objectclass: posixGroup
 

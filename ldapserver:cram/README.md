@@ -37,5 +37,5 @@ objectclass: posixGroup
 #### Execució
 
 ```
-$ docker run --rm --name ldap_gssapi.edt.org -h ldap_gssapi.edt.org --net gssapinet -d danicano/ldapserver:gssapi
+$ docker run --rm --name ldap.md5_cram -h ldap.md5_cram --net netldap -d danicano/ldapserver:md5_cram
 ```
