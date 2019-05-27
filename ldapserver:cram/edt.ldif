@@ -92,7 +92,7 @@ uid: pau
 uidNumber: 5000
 gidNumber: 100
 homeDirectory: /tmp/home/pau
-userPassword: {SSHA}NDkipesNQqTFDgGJfyraLz/csZAIlk2/
+userPassword: pau
 
 dn: uid=pere,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -107,7 +107,7 @@ uid: pere
 uidNumber: 50001
 gidNumber: 10000
 homeDirectory: /tmp/home/pere
-userPassword: {SSHA}ghmtRL11YtXoUhIP7z6f7nb8RCNadFe+
+userPassword: pere
 
 dn: uid=anna,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -123,7 +123,7 @@ uid: anna
 uidNumber: 5002
 gidNumber: 600
 homeDirectory: /tmp/home/anna
-userPassword: {SSHA}Bm4B3Bu/fuH6Bby9lgxfFAwLYrK0RbOq
+userPassword: anna
 
 dn: uid=marta,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -138,7 +138,7 @@ uid: marta
 uidNumber: 5003
 gidNumber: 600
 homeDirectory: /tmp/home/marta
-userPassword: {SSHA}9+1F2f5vcW8z/tmSzYNWdlz5GbDCyoOw
+userPassword: marta
 
 dn: uid=jordi,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -155,7 +155,7 @@ uid: jordi
 uidNumber: 5004
 gidNumber: 100
 homeDirectory: /tmp/home/jordi
-userPassword: {SSHA}T5jrMgpJwZZgu0azkLIVoYhiG08/KGUv
+userPassword: jordi
 
 dn: uid=prova1,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -173,22 +173,6 @@ gidNumber: 100
 homeDirectory: /tmp/home/prova1
 userPassword: prova1
 
-dn: uid=prova2,ou=usuaris,dc=edt,dc=org
-objectclass: posixAccount
-objectclass: inetOrgPerson
-cn: prova2 Indias
-sn: Indias
-homephone: 555-666-2224
-mail: prova2@edt.org
-description: Watch out for this girl
-ou: Alumnes
-ou: Profes
-uid: prova2
-uidNumber: 5006
-gidNumber: 100
-homeDirectory: /tmp/home/prova2
-userPassword: 
-
 dn: uid=admin,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
 objectclass: inetOrgPerson
@@ -204,7 +188,7 @@ uid: admin
 uidNumber: 10
 gidNumber: 10
 homeDirectory: /tmp/home/admin
-userPassword: {SSHA}4mS0FycWc5bkpW8/a396SGNDTQUlFSX3
+userPassword: admin
 
 dn: uid=user01,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -220,7 +204,7 @@ uid: user01
 uidNumber: 7001
 gidNumber: 610
 homeDirectory: /tmp/home/1asix/user01
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user01
 
 dn: uid=user02,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -236,7 +220,7 @@ uid: user02
 uidNumber: 7002
 gidNumber: 610
 homeDirectory: /tmp/home/1asix/user02
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user02
 
 dn: uid=user03,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -252,7 +236,7 @@ uid: user03
 uidNumber: 7003
 gidNumber: 610
 homeDirectory: /tmp/home/1asix/user03
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user03
 
 dn: uid=user04,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -268,7 +252,7 @@ uid: user04
 uidNumber: 7004
 gidNumber: 610
 homeDirectory: /tmp/home/1asix/user04
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user04
 
 dn: uid=user05,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -284,7 +268,7 @@ uid: user05
 uidNumber: 7005
 gidNumber: 610
 homeDirectory: /tmp/home/1asix/user05
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user05
 
 dn: uid=user06,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -300,7 +284,7 @@ uid: user06
 uidNumber: 7006
 gidNumber: 611
 homeDirectory: /tmp/home/2asix/user06
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user06
 
 dn: uid=user07,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -316,7 +300,7 @@ uid: user07
 uidNumber: 7007
 gidNumber: 611
 homeDirectory: /tmp/home/2asix/user07
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user07
 
 dn: uid=user08,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -332,7 +316,7 @@ uid: user08
 uidNumber: 7008
 gidNumber: 611
 homeDirectory: /tmp/home/2asix/user08
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user08
 
 dn: uid=user09,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -348,7 +332,7 @@ uid: user09
 uidNumber: 7009
 gidNumber: 611
 homeDirectory: /tmp/home/2asix/user09
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user09
 
 dn: uid=user10,ou=usuaris,dc=edt,dc=org
 objectclass: posixAccount
@@ -364,7 +348,7 @@ uid: user10
 uidNumber: 7010
 gidNumber: 611
 homeDirectory: /tmp/home/2asix/user10
-userPassword: {SHA}ovf8ta/reYP/u2zj0afpHt8yE1A=
+userPassword: user10
 
 # ---------- Clients ----------------------------
 
@@ -584,7 +568,6 @@ description: Grup de alumnes
 memberUid: anna
 memberuid: marta
 memberUid: prova1
-memberUid: prova2
 memberUid: jordi
 objectclass: posixGroup
 

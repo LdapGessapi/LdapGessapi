@@ -39,3 +39,18 @@ objectclass: posixGroup
 ```
 $ docker run --rm --name ldap.md5_cram -h ldap.md5_cram --net netldap -d danicano/ldapserver:md5_cram
 ```
+
+ldapsearch -h localhost -p 389 -x -b "" -s base -LLL supportedSASLMechanisms
+
+
+saslpasswd2 -c pere
+Password: 
+Again (for verification): 
+[root@ldap docker]# sasldblistusers2 
+anna@ldap.md5_cram: userPassword
+pere@ldap.md5_cram: userPassword
+[root@ldap docker]# ldapsearch -U pere uid=jordi
+SASL/CRAM-MD5 authentication started
+Please enter your password: 
+ldap_sasl_interactive_bind_s: Invalid credentials (49)
+	additional info: SASL(-13): user not found: no secret in database
