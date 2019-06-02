@@ -19,5 +19,5 @@ kadmin.local -q "addprinc -pw kadmin admin/admin"
 kadmin.local -q "addprinc -pw kuser01 user01"
 kadmin.local -q "addprinc -pw kuser03 user03"
 kadmin.local -q "addprinc -pw kuser02 user02"
-kadmin.local -q "addprinc -randkey ldap/ldap_gssapi.edt.org"
+kadmin.local -q "addprinc -randkey ldap/ldap.edt.org"
 

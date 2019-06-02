@@ -9,7 +9,7 @@ useradd -g users -G kusers user01
 echo "local01" | passwd --stdin local01
 
 cp  /opt/docker/ldap.conf /etc/openldap/ldap.conf
-cp /opt/docker/slapd2.conf /etc/sasl2/slapd.conf
+cp /opt/docker/salpd2.conf /etc/sasl2/slapd.conf
 mkdir /etc/openldap/certs
 cp /opt/docker/cacert.pem /etc/openldap/certs/.
 cp /opt/docker/servercert.ldap.pem /etc/openldap/certs/.
@@ -22,3 +22,4 @@ slaptest -F /etc/openldap/slapd.d -f /opt/docker/slapd.conf
 slapadd -F /etc/openldap/slapd.d -l /opt/docker/edt.ldif
 chown -R ldap.ldap /etc/openldap/slapd.d
 chown -R ldap.ldap /var/lib/ldap
+

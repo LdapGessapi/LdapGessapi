@@ -37,5 +37,8 @@ objectclass: posixGroup
 #### Execució
 
 ```
-$ docker run --rm --name ldap.edt.org -h ldap.edt.org --net ldapnet -d danicano/ldapserver:gssapi
+docker run --rm --name ldap.edt.org -h ldap.edt.org --net ldapnet -d danicano/ldapserver:external
 ```
+
+ldapsearch -h localhost -p 389 -x -b "" -s base -LLL supportedSASLMechanisms
+

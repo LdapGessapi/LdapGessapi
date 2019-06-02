@@ -23,4 +23,4 @@ chown -R ldap.ldap /etc/openldap/slapd.d
 chown -R ldap.ldap /var/lib/ldap
 
 cp /opt/docker/krb5.conf /etc/krb5.conf
-kadmin -p admin -w kadmin -q "ktadd -k /etc/krb5.keytab ldap/ldap_gssapi.edt.org" #exportar claus
+kadmin -p admin -w kadmin -q "ktadd -k /etc/krb5.keytab ldap/ldap.edt.org" #exportar claus

@@ -12,10 +12,10 @@ Les característiques principals són:
  * s'ha d'anomenar kserver.edt.org
  * usuaris amb nomenclatura ldap:   pere, pau (administrador), jordi, marta, anna, julia.
  * usuaris administradors kerberos: superuser (administrador), marta/admin.
- * es crea un principal de host corresponent al servidor host/sshd.edt.org.
+ * es crea un principal de host corresponent al servidor host/ldap.edt.org.
  * tot el procés és autometitzat i el servidor s'executa detach.
 
 Execució:
 ```
-docker run --rm --name kserver.edt.org -h kserver.edt.org --net gssapinet -d danicano/k18:kserver_gssapi
+docker run --rm --name kserver.edt.org -h kserver.edt.org --net ldapnet -d danicano/k18:kserver_gssapi
 ```

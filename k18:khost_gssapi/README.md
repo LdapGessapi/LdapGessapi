@@ -36,9 +36,9 @@ authconfig  --enableshadow --enablelocauthorize --enableldap \
 
 #### Execució:
 ```
-docker run --rm --name kserver.edt.org -h kserver.edt.org --net gssapinet -d danicano/k18:kserver_gssapi
-docker run --rm --name ldap_gssapi.edt.org -h ldap_gssapi.edt.org --net gssapinet -d danicano/ldapserver:gssapi
-docker run --rm --name khost.edt.org -h khost.edt.org --net gssapinet -it danicano/k18:khost_gssapi
+docker run --rm --name kserver.edt.org -h kserver.edt.org --net ldapnet -d danicano/k18:kserver_gssapi
+docker run --rm --name ldap.edt.org -h ldap.edt.org --net ldapnet -d danicano/ldapserver:gssapi
+docker run --rm --name khost.edt.org -h khost.edt.org --net ldapnet -it danicano/k18:khost_gssapi
 ```
 
 Test:
