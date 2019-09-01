@@ -1,0 +1,20 @@
+% Proyecto fin de ciclo LdapGssapi
+% Daniel Cano
+% 2019/05/29
+
+---
+
+## INDICE
+
+
+* Dar a conocer las bases de una monitorización.
+
+* Colección y visualización de métricas con Telegraf, InfluxDB y Grafana.
+
+---
+
+## LDAP
+
+## LDAP SIMPLE
+
+## SASL
