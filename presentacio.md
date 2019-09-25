@@ -102,3 +102,95 @@ El servidor LDAP luego usa la contraseña almacenada del cliente para determinar
   
 ## GSSAPI
 
+* Primero de todo tenemos que saber que es **KERBEROS**
+
+* Kerberos es un protocolo de autenticación. Usa **Key Distribution Center, "KDC"** (centro de distribución de claves) el cual consiste en dos partes:
+
+	* Un **Authentication Server, "AS"** (servidor de autenticación)
+	
+	* Y un **Ticket Granting Server, "TGS"** (servidor emisor de tickets), los cuales sirven para demostrar la identidad de los usuarios.
+
+* Kerberos mantiene una base de datos de claves secretas. Cada cliente o servidor comparte una clave secreta únicamente conocida por él y Kerberos. 
+Esta clave sirve para probar la identidad de la entidad. ![https://es.wikipedia.org/wiki/Kerberos#/media/Archivo:Kerberos-funcion.svg](AUX/KRB.png =750x250 "Funcionamiento de Kerberos") 
+
+* Una vez tenemos el un servidor Kerberos pasamos al servidor LDAP.Aparte de usar SASL ahora necesitamos que se autentique con Kerberos para recibir el "ticket".
+
+	* Necesitamos un fichero (**krb5.conf**) que contiene configuracion del servidor Kerberos, este es el mismo tanto en el servidor LDAP ,en Kerberos y en el cliente. 
+	De esta manera ya es capaz de llegar a Kerberos.
+	
+		**/etc/krb5.conf**		
+					
+			[libdefaults]
+			dns_lookup_realm = false
+			ticket_lifetime = 24h
+			renew_lifetime = 7d
+			forwardable = true
+			rdns = false
+			default_realm = EDT.ORG
+			
+			[realms]
+			EDT.ORG = {
+			kdc = kserver.edt.org
+			admin_server = kserver.edt.org
+			}
+			
+			[domain_realm]
+			.edt.org = EDT.ORG
+			edt.org = EDT.ORG
+	
+	* Para que pueda recibir el "ticket" hay que importar las claves.
+		
+			kadmin -p admin -w kadmin -q "ktadd -k /etc/krb5.keytab ldap/ldap.edt.org"
+			
+	* Y por ultimo modificaremos el fichero de configuracion del servidor LDAP (**slapd.conf**).
+	
+		Tenemos que configurar para que LDAP reconozca los "principals" (identidad a la que Kerberos puede asignar tickets) como usuarios de LDAP.
+		
+				authz-policy from
+				authz-regexp "^uid=[^.*]+/admin,cn=edt\.org,cn=gssapi,cn=auth" "cn=Manager,dc=edt,dc=org"
+				authz-regexp "^uid=admin,cn=edt\.org,cn=gssapi,cn=auth" "cn=Manager,dc=edt,dc=org"
+				authz-regexp "^uid=([^.*]+),cn=edt\.org,cn=gssapi,cn=auth" "cn=$1,ou=usuaris,dc=edt,dc=org"
+		
+		Cuando intentamos utilizar alguna operacion que requiere un ticket con LDAP a traves de los usuarios LDAP, la identidad no sale como estamos acosstrumbrados, por eso utilizamos el paso anterior.
+		
+		La primera linea habilita *authz-regexp*.
+		
+		La segunda y tercera transforma todos los "principals" admin (**/admin@EDT.ORG* o *admin@EDT.ORG*) a nuestro
+		admin de LDAP (*cn=Manager,dc=edt,dc=org*). 
+		
+		Y la ultima transforma todas las entradas (**/edt.org*) a usuario LDAP.
+		
+		* Sin midificar slapd.conf: 
+			
+			![](AUX/princ2.png "Sin authz-regexp")
+			
+		* Modificando slapd.conf: ![](AUX/princ1.png "Con authz-regexp")
+			
+		Si queremos limitar las opciones de SASL paraque sea por defecto GSSAPI utilizaremos **sasl-secprops** (se usa para especificar las propiedades de seguridad).
+		
+			sasl-secprops noanonymous,noplain,noactive
+			
+		Este debería ser el reino definido en el archivo krb5.conf.
+
+			sasl-realm EDT.ORG
+			
+		Aqui hay que colocar el nombre del servidor LDAP, es muy importante para la importacion de claves.
+		
+			sasl-host ldap.edt.org
+			
+* Ya solo nos queda el cliente. Para ello necesitaremos el fichero **/etc/krb5.conf** que he mencionado anteriormente y modificar el fichero de conficuracion de Ldap cliente (**ldap.conf**).
+
+	* **/etc/openldap/ldap.conf**:
+		
+			BASE	dc=edt,dc=org
+			URI	ldap://ldap.edt.org
+			
+			TLS_CACERT /etc/openldap/certs/cacert.pem
+			TLS_REQCERT     allow
+			
+		* *BASE*: La base de nuestra base de datos de LDAP.
+		* *URI*: El nombre del servidor LDAP (FQDN)
+		* *TLS_CACERT*: La ruta donde esta la CA que firmoo los certificados LDAP
+		* *TLS_REQCERT*: Especifica que tipo de comprobación se ha de realizar a un certificado de servidor
+		* *SASL_MECH*: Aqui poner nuestro mecanismo (GSSAPI), nos ahorraremos de poner -Y en cada sentencia
+		* *SASL_REALM*: El Reino SASL que definimos en el archivo slapd.conf

@@ -10,7 +10,7 @@ echo "local01" | passwd --stdin local01
 
 cp  /opt/docker/ldap.conf /etc/openldap/ldap.conf
 cp /opt/docker/slapd2.conf /etc/sasl2/slapd.conf
-mkdir /etc/openldap/certs
+#mkdir /etc/openldap/certs
 cp /opt/docker/cacert.pem /etc/openldap/certs/.
 cp /opt/docker/servercert.ldap.pem /etc/openldap/certs/.
 cp /opt/docker/serverkey.ldap.pem  /etc/openldap/certs/.
