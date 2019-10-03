@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Daniel Cano" />
+  <title>Proyecto fin de ciclo LdapGssapi</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+      .aa{margin-left: 30%;}      
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Proyecto fin de ciclo LdapGssapi</h1>
+  <p class="author">
+Daniel Cano
+  </p>
+  <p class="date">2019/05/29</p>
+</div>
+<div id="índice" class="slide section level2">
+<h1>ÍNDICE</h1>
+<ul>
+<li><p>OBJETIVOS</p></li>
+<li><p>LDAP</p></li>
+<li><p>SIMPLE</p></li>
+<li><p>SASL</p></li>
+<li><p>MD5/CRAM</p></li>
+<li><p>EXTERNAL</p></li>
+<li><p>GSSAPI</p></li>
+</ul>
+</div>
+<div id="objetivos" class="slide section level2">
+<h1>OBJETIVOS</h1>
+<ul>
+<li><p>Presentar LDAP</p></li>
+<li><p>Mostrar algunos de sus métodos de autenticación</p></li>
+<li><p>Dar a conocer SASL</p></li>
+</ul>
+</div>
+<div id="ldap" class="slide section level2">
+<h1>LDAP</h1>
+<ul>
+<li>Son las siglas de <strong>Lightweight Directory Access Protocol</strong> (en español Protocolo Ligero/Simplificado de Acceso a Directorios) que permite el acceso a un servicio de directorio ordenado y distribuido para buscar diversa información en un entorno de red.</li>
+<li>Un directorio es un conjunto de objetos con atributos organizados en una manera lógica y jerárquica.</li>
+<li>En un árbol de directorio pueden aparecer entradas que representan personas, unidades organizativas, impresoras o cualquier cosa que representa una o múltiples entradas dadas en el árbol.</li>
+<li>Habitualmente, almacena la información de autenticación (usuario y contraseña) y es utilizado para autenticarse aunque es posible almacenar otra información como datos de contacto del usuario.</li>
+<li>LDAP también es considerado una base de datos en la cual pueden realizarse consultas.</li>
+</ul>
+</div>
+<div id="simple" class="slide section level2">
+<h1>SIMPLE</h1>
+<ul>
+<li>La autenticación simple consiste en que un cliente (usuario) envíe al servidor LDAP (<strong>bind</strong>) el DN completo y la contraseña de texto sin cifrar.</li>
+<li><p>Este mecanismo no es muy fiable respecto a la seguridad, ya la contraseña se ha enviado en texto plano por la red.</p>
+<pre><code>  ldapwhoami -x -D &quot;uid=pere,ou=usuaris,dc=edt,dc=org&quot; -w pere</code></pre></li>
+</ul>
+</div>
+<div id="sasl" class="slide section level2">
+<h1>SASL</h1>
+<ul>
+<li><strong>Simple Authentication and Security Layer</strong> (capa de seguridad y autenticación simple).</li>
+<li>SASL es un entorno de trabajo para autenticación y autorización en protocolos de Internet. Permite a cualquier protocolo de aplicación que use SASL usar cualquier mecanismo de autenticación soportado por SASL.</li>
+<li>Para utilizarlo en LDAP hay que configurar el slapd del servidor para que pueda comunicarse con los clientes. Hay que tener en cuenta la asignación de identidades de autenticación a los DN de LDAP.</li>
+</ul>
+</div>
+<div id="md5cram" class="slide section level2">
+<h1>MD5/CRAM</h1>
+<ul>
+<li>MD5/CRAM funciona utilizando secretos almacenados en el directorio o en la propia base de datos de Cyrus SASL.
+<ul>
+<li><p>Para usar secretos almacenados en sasldb, se hace mediante <strong>saslpasswd2</strong>:</p>
+<pre><code>  saslpasswd2 -c &quot;usuario&quot;</code></pre></li>
+<li><p>Para usar los secretos almacenados en el directorio LDAP, necesitamos poner la contraseña sin formato en el atributo <strong>userPassword</strong> y agregar la opción <strong>password-hash {CLEARTEXT}</strong> en el slapd.conf para asegurarse que las contraseñas se almacenen en texto sin formato.</p></li>
+</ul></li>
+<li>MD5/CRAM se basa en que el cliente y el servidor comparten un “secreto”, el cual esta cifrado mediante la contraseña.</li>
+<li>El servidor genera un desafío y el cliente responde cifrando los datos con su contraseña utilizando el algoritmo MD5. El servidor LDAP luego usa la contraseña almacenada del cliente para determinar si el cliente usó la contraseña correcta.</li>
+<li>Este método es más seguro que simplemente enviar la contraseña por red.</li>
+</ul>
+</div>
+<div id="external" class="slide section level2">
+<h1>EXTERNAL</h1>
+<ul>
+<li><p>Funciona a partir de la confianza de los certificados cliente servidor.</p></li>
+<li><p>Para admitir la autenticación LDAP utilizando el mecanismo SASL EXTERNO necesitamos usar <strong>TLS</strong> (Transport Layer Security) para proporcionar protecciones de integridad y confidencialidad.</p></li>
+<li><p>TLS utiliza certificados para llevar la identidad del servidor y del cliente.</p></li>
+<li><p>Antes de crear los certificados tenemos que crear una <strong>CA</strong> (Autoridad certificadora) para poder crear certificados validos y confiables.</p>
+<ul>
+<li><p>Creamos certificado CA autofirmado.</p>
+<pre><code>  openssl req -new -x509 -nodes -keyout cakey.pem -days 3650 -out cacert.pem</code></pre></li>
+<li><p>Certificado servidor</p>
+<ul>
+<li><p>Generamos la clave</p>
+<pre><code>  openssl genrsa -out serverkey.ldap.pem</code></pre></li>
+<li><p>Generamos solicitud para que la firme la CA</p>
+<pre><code>  openssl req -new -key serverkey.ldap.pem -out serverreq.ldap.pem</code></pre></li>
+<li><p>Firmamos petición</p>
+<pre><code>  openssl x509 -CA cacert.pem -CAkey cakey.pem -req -in serverreq.ldap.pem -days 3650 -CAcreateserial -out servercert.ldap.pem</code></pre></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="gssapi" class="slide section level2">
+<h1>GSSAPI</h1>
+<ul>
+<li><p>Primero de todo tenemos que saber que es <strong>KERBEROS</strong></p></li>
+<li><p>Kerberos es un protocolo de autenticación. Usa <strong>Key Distribution Center, “KDC”</strong> (centro de distribución de claves) el cual consiste en dos partes:</p>
+<ul>
+<li><p>Un <strong>Authentication Server, “AS”</strong> (servidor de autenticación)</p></li>
+<li><p>Y un <strong>Ticket Granting Server, “TGS”</strong> (servidor emisor de tickets), los cuales sirven para demostrar la identidad de los usuarios.</p></li>
+</ul></li>
+<li><p>Kerberos mantiene una base de datos de claves secretas. Cada cliente o servidor comparte una clave secreta únicamente conocida por él y Kerberos. Esta clave sirve para probar la identidad de la entidad. </p>
+<p><img src="AUX/KRB.png" weight="750" height="400" title="Funcionamiento de Kerberos" class="aa" /></p></li>
+</ul>
+</div>
+<div id="gssapi-1" class="slide section level2">
+<h1>GSSAPI</h1>
+<ul>
+<li><p>Una vez tenemos el un servidor Kerberos pasamos al servidor LDAP.Aparte de usar SASL ahora necesitamos que se autentique con Kerberos para recibir el “ticket”.</p>
+<ul>
+<li><p>Necesitamos un fichero (<strong>krb5.conf</strong>) que contiene configuración del servidor Kerberos, este es el mismo tanto en el servidor LDAP ,en Kerberos y en el cliente. De esta manera ya es capaz de llegar a Kerberos.</p>
+<p><strong>/etc/krb5.conf</strong></p>
+<pre><code>  [libdefaults]
+  dns_lookup_realm = false
+  ticket_lifetime = 24h
+  renew_lifetime = 7d
+  forwardable = true
+  rdns = false
+  default_realm = EDT.ORG
+
+  [realms]
+  EDT.ORG = {
+  kdc = kserver.edt.org
+  admin_server = kserver.edt.org
+  }
+
+  [domain_realm]
+  .edt.org = EDT.ORG
+  edt.org = EDT.ORG</code></pre></li>
+<li><p>Para que pueda recibir el “ticket” hay que importar las claves.</p>
+<pre><code>  kadmin -p admin -w kadmin -q &quot;ktadd -k /etc/krb5.keytab ldap/ldap.edt.org&quot;</code></pre></li>
+</ul></li>
+</ul>
+</div>
+<div id="gssapi-2" class="slide section level2">
+<h1>GSSAPI</h1>
+<ul>
+<li><p>Y por ultimo modificaremos el fichero de configuración del servidor LDAP (<strong>slapd.conf</strong>).</p>
+<p>Tenemos que configurar para que LDAP reconozca los “principals” (identidad a la que Kerberos puede asignar tickets) como usuarios de LDAP.</p>
+<pre><code>      authz-policy from
+      authz-regexp &quot;^uid=[^.*]+/admin,cn=edt\.org,cn=gssapi,cn=auth&quot; &quot;cn=Manager,dc=edt,dc=org&quot;
+      authz-regexp &quot;^uid=admin,cn=edt\.org,cn=gssapi,cn=auth&quot; &quot;cn=Manager,dc=edt,dc=org&quot;
+      authz-regexp &quot;^uid=([^.*]+),cn=edt\.org,cn=gssapi,cn=auth&quot; &quot;cn=$1,ou=usuaris,dc=edt,dc=org&quot;</code></pre>
+<p>Cuando intentamos utilizar alguna operación que requiere un ticket con LDAP a través de los usuarios LDAP, la identidad no sale como estamos acostumbrados, por eso utilizamos el paso anterior.</p>
+<p>La primera linea habilita <em>authz-regexp</em>.</p>
+<p>La segunda y tercera transforma todos los “principals” admin (*/admin@EDT.ORG o admin@EDT.ORG) a nuestro admin de LDAP (cn=Manager,dc=edt,dc=org).</p>
+<p>Y la ultima transforma todas las entradas (*/edt.org) a usuario LDAP.</p></li>
+</ul>
+</div>
+<div id="gssapi-3" class="slide section level2">
+<h1>GSSAPI</h1>
+<ul>
+<li><p>Sin modificar slapd.conf:</p>
+<p><img src="AUX/princ2.png" title="Sin authz-regexp" /></p></li>
+<li><p>Modificando slapd.conf:</p>
+<p><img src="AUX/princ1.png" title="Con authz-regexp" /></p></li>
+</ul>
+<p>Si queremos limitar las opciones de SASL para que sea por defecto GSSAPI utilizaremos <strong>sasl-secprops</strong> (se usa para especificar las propiedades de seguridad).</p>
+<pre><code>sasl-secprops noanonymous,noplain,noactive</code></pre>
+<p>Este debería ser el reino definido en el archivo krb5.conf.</p>
+<pre><code>sasl-realm EDT.ORG</code></pre>
+</div>
+<div id="gssapi-4" class="slide section level2">
+<h1>GSSAPI</h1>
+<p>Aquí hay que colocar el nombre del servidor LDAP, es muy importante para la importación de claves.</p>
+<pre><code>sasl-host ldap.edt.org
+        </code></pre>
+<ul>
+<li><p>Ya solo nos queda el cliente. Para ello necesitaremos el fichero <strong>/etc/krb5.conf</strong> que he mencionado anteriormente y modificar el fichero de configuración de LDAP cliente (<strong>ldap.conf</strong>).</p>
+<ul>
+<li><p><strong>/etc/openldap/ldap.conf</strong>:</p>
+<pre><code>  BASE    dc=edt,dc=org
+  URI ldap://ldap.edt.org
+
+  TLS_CACERT /etc/openldap/certs/cacert.pem
+  TLS_REQCERT     allow</code></pre>
+<ul>
+<li><em>BASE</em>: La base de nuestra base de datos de LDAP.</li>
+<li><em>URI</em>: El nombre del servidor LDAP (FQDN)</li>
+<li><em>TLS_CACERT</em>: La ruta donde esta la CA que firmó los certificados LDAP</li>
+<li><em>TLS_REQCERT</em>: Especifica que tipo de comprobación se ha de realizar a un certificado de servidor</li>
+<li><em>SASL_MECH</em>: Aquí poner nuestro mecanismo (GSSAPI), nos ahorraremos de poner -Y en cada sentencia</li>
+<li><em>SASL_REALM</em>: El Reino SASL que definimos en el archivo slapd.conf</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</body>
+</html>

@@ -113,6 +113,8 @@ El servidor LDAP luego usa la contraseña almacenada del cliente para determinar
 * Kerberos mantiene una base de datos de claves secretas. Cada cliente o servidor comparte una clave secreta únicamente conocida por él y Kerberos. 
 Esta clave sirve para probar la identidad de la entidad. ![https://es.wikipedia.org/wiki/Kerberos#/media/Archivo:Kerberos-funcion.svg](AUX/KRB.png =750x250 "Funcionamiento de Kerberos") 
 
+## GSSAPI
+
 * Una vez tenemos el un servidor Kerberos pasamos al servidor LDAP.Aparte de usar SASL ahora necesitamos que se autentique con Kerberos para recibir el "ticket".
 
 	* Necesitamos un fichero (**krb5.conf**) que contiene configuración del servidor Kerberos, este es el mismo tanto en el servidor LDAP ,en Kerberos y en el cliente. 
@@ -142,43 +144,49 @@ Esta clave sirve para probar la identidad de la entidad. ![https://es.wikipedia.
 		
 			kadmin -p admin -w kadmin -q "ktadd -k /etc/krb5.keytab ldap/ldap.edt.org"
 
-	* Y por ultimo modificaremos el fichero de configuración del servidor LDAP (**slapd.conf**).
-		
-		Tenemos que configurar para que LDAP reconozca los "principals" (identidad a la que Kerberos puede asignar tickets) como usuarios de LDAP.
-		
-				authz-policy from
-				authz-regexp "^uid=[^.*]+/admin,cn=edt\.org,cn=gssapi,cn=auth" "cn=Manager,dc=edt,dc=org"
-				authz-regexp "^uid=admin,cn=edt\.org,cn=gssapi,cn=auth" "cn=Manager,dc=edt,dc=org"
-				authz-regexp "^uid=([^.*]+),cn=edt\.org,cn=gssapi,cn=auth" "cn=$1,ou=usuaris,dc=edt,dc=org"
-	
-		Cuando intentamos utilizar alguna operación que requiere un ticket con LDAP a través de los usuarios LDAP, la identidad no sale como estamos acostumbrados, por eso utilizamos el paso anterior.
-		
-		La primera linea habilita *authz-regexp*.
-		
-		La segunda y tercera transforma todos los "principals" admin (*/admin@EDT.ORG o admin@EDT.ORG) a nuestro
-		admin de LDAP (cn=Manager,dc=edt,dc=org). 
-		
-		Y la ultima transforma todas las entradas (*/edt.org) a usuario LDAP.
-	
-		* Sin modificar slapd.conf: 
-					
-			![](AUX/princ2.png "Sin authz-regexp")
-					
-		* Modificando slapd.conf: 
-		
-			![](AUX/princ1.png "Con authz-regexp")
-					
-		Si queremos limitar las opciones de SASL para que sea por defecto GSSAPI utilizaremos **sasl-secprops** (se usa para especificar las propiedades de seguridad).
-		
-			sasl-secprops noanonymous,noplain,noactive
+## GSSAPI 
 			
-		Este debería ser el reino definido en el archivo krb5.conf.
-		
-			sasl-realm EDT.ORG
+* Y por ultimo modificaremos el fichero de configuración del servidor LDAP (**slapd.conf**).
 	
-		Aquí hay que colocar el nombre del servidor LDAP, es muy importante para la importación de claves.
+	Tenemos que configurar para que LDAP reconozca los "principals" (identidad a la que Kerberos puede asignar tickets) como usuarios de LDAP.
+	
+			authz-policy from
+			authz-regexp "^uid=[^.*]+/admin,cn=edt\.org,cn=gssapi,cn=auth" "cn=Manager,dc=edt,dc=org"
+			authz-regexp "^uid=admin,cn=edt\.org,cn=gssapi,cn=auth" "cn=Manager,dc=edt,dc=org"
+			authz-regexp "^uid=([^.*]+),cn=edt\.org,cn=gssapi,cn=auth" "cn=$1,ou=usuaris,dc=edt,dc=org"
+	
+	Cuando intentamos utilizar alguna operación que requiere un ticket con LDAP a través de los usuarios LDAP, la identidad no sale como estamos acostumbrados, por eso utilizamos el paso anterior.
+	
+	La primera linea habilita *authz-regexp*.
+	
+	La segunda y tercera transforma todos los "principals" admin (*/admin@EDT.ORG o admin@EDT.ORG) a nuestro
+	admin de LDAP (cn=Manager,dc=edt,dc=org). 
+	
+	Y la ultima transforma todas las entradas (*/edt.org) a usuario LDAP.
+
+## GSSAPI 
 		
-			sasl-host ldap.edt.org
+* Sin modificar slapd.conf: 
+			
+	![](AUX/princ2.png "Sin authz-regexp")
+			
+* Modificando slapd.conf: 
+
+	![](AUX/princ1.png "Con authz-regexp")
+			
+Si queremos limitar las opciones de SASL para que sea por defecto GSSAPI utilizaremos **sasl-secprops** (se usa para especificar las propiedades de seguridad).
+
+	sasl-secprops noanonymous,noplain,noactive
+	
+Este debería ser el reino definido en el archivo krb5.conf.
+
+	sasl-realm EDT.ORG
+
+## GSSAPI 
+	
+Aquí hay que colocar el nombre del servidor LDAP, es muy importante para la importación de claves.
+
+	sasl-host ldap.edt.org
 			
 * Ya solo nos queda el cliente. Para ello necesitaremos el fichero **/etc/krb5.conf** que he mencionado anteriormente y modificar el fichero de configuración de LDAP cliente (**ldap.conf**).
 
