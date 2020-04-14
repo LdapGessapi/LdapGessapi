@@ -3,35 +3,45 @@
 
 ## @edt ASIX M06-ASO Curs 2018-2019
 
-Servidor ldap amb edt.org, amb usuaris i grups, RDN=uid
-Exercici per practicar tots els conceptes treballats.
+#### Creacio certificat
 
+##### Generar clau
 
-S'han afegit els grups que són posixGroup i identifiquen als membres del group amb l'atribut memberUid.
+	[user@localhost ldapserver:external]$ openssl genrsa -out serverkey.ldap.pem
+	Generating RSA private key, 2048 bit long modulus (2 primes)
+	.............+++++
+	............................................................................+++++
+	e is 65537 (0x010001)
 
-#### Exemple de dades .ldif
+##### Peticio
 
-Entitat **grups** per acollir els grups:
-```
-dn: ou=grups,dc=edt,dc=org
-ou: groups
-description: Container per a grups
-objectclass: organizationalunit
-```
+	[user@localhost ldapserver:external]$ openssl req -new -key serverkey.ldap.pem -nodes -out serverreq.ldap.pem
+	You are about to be asked to enter information that will be incorporated
+	into your certificate request.
+	What you are about to enter is what is called a Distinguished Name or a DN.
+	There are quite a few fields but you can leave some blank
+	For some fields there will be a default value,
+	If you enter '.', the field will be left blank.
+	-----
+	Country Name (2 letter code) [XX]:ca
+	State or Province Name (full name) []:bcn
+	Locality Name (eg, city) [Default City]:bcn
+	Organization Name (eg, company) [Default Company Ltd]:edt
+	Organizational Unit Name (eg, section) []:inf
+	Common Name (eg, your name or your server's hostname) []:ldapserver
+	Email Address []:ldapserver@edt.org  
+	
+	Please enter the following 'extra' attributes
+	to be sent with your certificate request
+	A challenge password []:
+	An optional company name []:
 
-Entitat grup 2asix:
-```
-dn: cn=2asix,ou=grups,dc=edt,dc=org
-cn: 2asix
-gidNumber: 611
-description: Grup de 2asix
-memberUid: user06
-memberUid: user07
-memberUid: user08
-memberUid: user09
-memberUid: user10
-objectclass: posixGroup
-```
+##### Signar peticio
+
+	[user@localhost ldapserver:external]$ openssl x509 -CA cacert.pem -CAkey cakey.pem -req -in serverreq.ldap.pem -days 3650 -CAcreateserial -out servercert.ldap.pem 
+	Signature ok
+	subject=C = ca, ST = bcn, L = bcn, O = edt, OU = inf, CN = ldapserver, emailAddress = ldapserver@edt.org
+	Getting CA Private Key
 
 
 #### Execució
